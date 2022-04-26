@@ -24,6 +24,8 @@ export const getSKUforSameBarcodeProduct = (targetBarcodes, barcodes) => {
   return sameBarcodeProduct.SKU;
 }
 
+// This function receives catalog A and B with no duplicate items, generates combined products list with
+// B first and A with the same description following.
 export const combineDifferentProducts = (catalogA, catalogB) => {
   const combinedProducts = [];
   let catalogACopy = [...catalogA];
@@ -57,6 +59,8 @@ export const combineDifferentProducts = (catalogA, catalogB) => {
 export const mergeProducts = (catalogA, catalogB, barcodesA, barcodesB) => {
   let finalCatalog = [], catalogACopy = [...catalogA], catalogBCopy = [...catalogB];
 
+  // Generate duplicated products list with sourced to A and put remaining items for A and B 
+  // to combine later.
   catalogB.forEach(productB => {
     if (productB.SKU) {
       const targetBarcodesB = getBarcodes(productB.SKU, barcodesB);
