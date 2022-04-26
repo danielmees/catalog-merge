@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Button from './components/Button';
 import CatalogMerge from './components/CatalogMerge';
 
 import './App.scss';
@@ -8,7 +7,7 @@ import './App.scss';
 function App() {
   return (
     <div className='catalog-merge'>
-      <Button label='Start merge catalogs' />
+      <h1>Catalog Merge</h1>
       <CatalogMerge />
     </div>
   );

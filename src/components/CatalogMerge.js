@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { convertCsvToJson } from '../utils/csvConverters';
+import Message from './Message';
+
+import { convertCsvToJson, convertJsonToCsvString } from '../utils/csvConverters';
 import { mergeProducts } from '../utils/dataSearchers';
 
 import catalogACsv from '../input/catalogA.csv';
@@ -13,6 +15,8 @@ const CatalogMerge = () => {
  const [catalogB, setCatalogB] = useState(null);
  const [barcodesA, setBarcodesA] = useState(null);
  const [barcodesB, setBarcodesB] = useState(null);
+ const [message, setMessage] = useState('Merging catalogs, please wait.');
+ const [messageType, setMessageType] = useState('');
 
   useEffect(() => {
     convertCsvToJson(catalogACsv, setCatalogA);
@@ -21,14 +25,37 @@ const CatalogMerge = () => {
     convertCsvToJson(barcodesBCsv, setBarcodesB);
   }, []);
 
+  const sendMergedCatalogToServer = async (mergedCatalogCsvString) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ csvData: mergedCatalogCsvString })
+    };
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/send-catalog`, requestOptions);
+      if (response.ok) {
+        setMessage('Merge completed! Result saved in src/output folder.');
+      } else {
+        setMessage('Something went wrong, please refresh the page to try again.');
+        setMessageType('warning');
+      }
+    } catch (_) {} 
+  }
+
   useEffect(() => {
     if (catalogA && catalogB && barcodesA && barcodesB) {
       const mergedCatalog = mergeProducts(catalogA, catalogB, barcodesA, barcodesB);
-      console.log('mergedCatalog', mergedCatalog);
+      if (mergedCatalog.length > 0) {
+        const mergedCatalogCsvString = convertJsonToCsvString(mergedCatalog);
+        sendMergedCatalogToServer(mergedCatalogCsvString);
+      }
     }
   }, [barcodesA, barcodesB, catalogA, catalogB]);
   
-  return <></>;
+  return <div>
+    <Message text={message} type={messageType} />
+  </div>;
 };
     
 export default CatalogMerge;
