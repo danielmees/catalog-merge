@@ -1,17 +1,17 @@
 import * as Papa from 'papaparse';
 
-export const convertCsvToJson = ( csv, callback ) => {
+export const convertCsvToJson = (csv, callback) => {
   if (!csv) return;
 
   const papaConfig = {
     header: true,
-    complete: results => {
+    complete: (results) => {
       if (results && results.data) {
         callback(results.data);
       }
     },
     download: true,
-    error: error => {
+    error: (error) => {
       console.log('error', error);
     },
   };
