@@ -14,7 +14,7 @@ Installs all the dependencies required to run the app.
 
 Runs the app in the development mode.\
 Runs a local server at port 3000 for saving the final csv in src/output folder at the same time.\
-Open [http://localhost:3006](http://localhost:3006) to view it in your browser.\
+Open [http://localhost:3006](http://localhost:3006) to view it in your browser.
 
 
 When the page loads, the app shows 'Merging catalogs, please wait.' while merging the catalogs.\
